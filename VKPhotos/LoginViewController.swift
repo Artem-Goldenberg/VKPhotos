@@ -9,13 +9,19 @@ import UIKit
 import WebKit
 
 class LoginViewController: UIViewController {
-    @IBOutlet weak var webView: WKWebView!
-    let loginner = VKPhotoFetcher()
+    var webView: WKWebView!
+    var photoFetcher: VKPhotoFetcher!
+    
+    override func loadView() {
+        super.loadView()
+        
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        view = webView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        webView.navigationDelegate = self
         
         webView.load(URLRequest(url: URL(string: "https://oauth.vk.com/authorize?client_id=7911455&scope=wall,offline&redirect_uri=oauth.vk.com/blank.html&display=touch&response_type=token")!))
     }
@@ -41,7 +47,7 @@ extension LoginViewController: WKNavigationDelegate {
             user["expires_in"] = currentURL.value(for: "expires_in")! // handle
             user["user_id"] = currentURL.value(for: "user_id")! // handle
             
-            loginner.loginWith(parameters: user)
+            photoFetcher.loginWith(parameters: user)
         } else {
             print("TOKEN NOT FOUND")
         }

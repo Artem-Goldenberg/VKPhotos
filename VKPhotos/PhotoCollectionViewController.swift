@@ -7,9 +7,12 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "Photo"
 
 class PhotoCollectionViewController: UICollectionViewController {
+    
+    var photoFetcher = VKPhotoFetcher()
+    var loadedPhotos = [UIImage]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,9 +21,47 @@ class PhotoCollectionViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        
 
         // Do any additional setup after loading the view.
+        
+       
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("ViewDidAppear")
+        
+        if let loginVC = storyboard?.instantiateViewController(identifier: "login") as? LoginViewController {
+            print("Instantiated")
+            loginVC.photoFetcher = photoFetcher
+            present(loginVC, animated: true) { [weak self] in
+                guard let self = self else { return }
+                self.loadedPhotos = Array(repeating: UIImage(), count: self.photoFetcher.photos.count)
+                self.loadImages()
+            }
+        }
+    }
+    
+    private func loadImages() {
+        for (index, photo) in photoFetcher.photos.enumerated() {
+            URLSession.shared.dataTask(with: photo.photo_1280) { [weak self] data, response, error in
+                guard
+                    let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                    let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                    let data = data, error == nil,
+                    let image = UIImage(data: data)
+                else {
+                    print("Failed")
+                    return
+                }
+                DispatchQueue.main.async() {
+                    print("Image fetched")
+                    self?.loadedPhotos[index] = image
+                    self?.collectionView.reloadData()
+                }
+            }.resume()
+        }
     }
 
     /*
@@ -36,21 +77,23 @@ class PhotoCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return photoFetcher.photos.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PhotoCell else {
+            print("Fail to dequeue photo cell")
+            
+            return UICollectionViewCell()
+        }
     
-        // Configure the cell
-    
+        cell.photo.image = loadedPhotos[indexPath.row]
+        
         return cell
     }
 

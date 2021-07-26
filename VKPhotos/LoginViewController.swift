@@ -10,7 +10,7 @@ import WebKit
 
 class LoginViewController: UIViewController {
     @IBOutlet weak var webView: WKWebView!
-    let loginner = VKLoginner()
+    let loginner = VKPhotoFetcher()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +19,6 @@ class LoginViewController: UIViewController {
         
         webView.load(URLRequest(url: URL(string: "https://oauth.vk.com/authorize?client_id=7911455&scope=wall,offline&redirect_uri=oauth.vk.com/blank.html&display=touch&response_type=token")!))
     }
-
-
 }
 
 extension LoginViewController: WKNavigationDelegate {

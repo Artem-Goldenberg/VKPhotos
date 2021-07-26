@@ -7,18 +7,16 @@
 
 import Foundation
 
-class VKLoginner: NSObject {
+class VKPhotoFetcher: NSObject {
     var id: String
     var token: String
     
-    var name: String
     var photos: [Photo]
     
     override init() {
-        id = UserDefaults.standard.string(forKey: VKLoginner.idKey) ?? ""
-        token = UserDefaults.standard.string(forKey: VKLoginner.tokenKey) ?? ""
+        id = UserDefaults.standard.string(forKey: VKPhotoFetcher.idKey) ?? ""
+        token = UserDefaults.standard.string(forKey: VKPhotoFetcher.tokenKey) ?? ""
         
-        name = ""
         photos = []
     }
     
@@ -26,13 +24,13 @@ class VKLoginner: NSObject {
         id = parameters["user_id"]! //handle
         token = parameters["access_token"]! //handle
         
-        UserDefaults.standard.set(id, forKey: VKLoginner.idKey)
-        UserDefaults.standard.set(token, forKey: VKLoginner.tokenKey)
+        UserDefaults.standard.set(id, forKey: VKPhotoFetcher.idKey)
+        UserDefaults.standard.set(token, forKey: VKPhotoFetcher.tokenKey)
         
         let requestString = "https://api.vk.com/method/photos.get?owner_id=-128666765&album_id=266276915&v=5.21&access_token=\(token)"
         
         var request = URLRequest(url: URL(string: requestString)!)
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let error = error {
@@ -56,19 +54,18 @@ class VKLoginner: NSObject {
         }
     }
     
-    private static let fetchPhotoIdentifier = "photo_1280"
+    struct Root: Codable {
+        var response: Response
+    }
+    
+    struct Response: Codable {
+        var items: [Photo]
+    }
+    
+    struct Photo: Codable {
+        var photo_1280: URL
+    }
+    
     private static let idKey = "id"
     private static let tokenKey = "token"
-}
-
-struct Root: Codable {
-    var response: Response
-}
-
-struct Response: Codable {
-    var items: [Photo]
-}
-
-struct Photo: Codable {
-    var photo_1280: URL
 }

@@ -13,6 +13,7 @@
 		81D7E63126AD6E7C00DEE730 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81D7E62F26AD6E7C00DEE730 /* Main.storyboard */; };
 		81D7E63326AD6E8300DEE730 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81D7E63226AD6E8300DEE730 /* Assets.xcassets */; };
 		81D7E63626AD6E8300DEE730 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81D7E63426AD6E8300DEE730 /* LaunchScreen.storyboard */; };
+		81D7E64F26ADFAF400DEE730 /* VKLoginner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7E64E26ADFAF400DEE730 /* VKLoginner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		81D7E63226AD6E8300DEE730 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81D7E63526AD6E8300DEE730 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		81D7E63726AD6E8300DEE730 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81D7E64E26ADFAF400DEE730 /* VKLoginner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				81D7E62926AD6E7C00DEE730 /* AppDelegate.swift */,
 				81D7E62B26AD6E7C00DEE730 /* SceneDelegate.swift */,
 				81D7E62D26AD6E7C00DEE730 /* LoginViewController.swift */,
+				81D7E64E26ADFAF400DEE730 /* VKLoginner.swift */,
 				81D7E62F26AD6E7C00DEE730 /* Main.storyboard */,
 				81D7E63226AD6E8300DEE730 /* Assets.xcassets */,
 				81D7E63426AD6E8300DEE730 /* LaunchScreen.storyboard */,
@@ -139,6 +142,7 @@
 			files = (
 				81D7E62E26AD6E7C00DEE730 /* LoginViewController.swift in Sources */,
 				81D7E62A26AD6E7C00DEE730 /* AppDelegate.swift in Sources */,
+				81D7E64F26ADFAF400DEE730 /* VKLoginner.swift in Sources */,
 				81D7E62C26AD6E7C00DEE730 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

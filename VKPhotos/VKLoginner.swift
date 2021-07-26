@@ -6,14 +6,13 @@
 //
 
 import Foundation
-import UIKit
 
 class VKLoginner: NSObject {
     var id: String
     var token: String
     
     var name: String
-    var photos: [UIImage]
+    var photos: [Photo]
     
     override init() {
         id = UserDefaults.standard.string(forKey: VKLoginner.idKey) ?? ""
@@ -30,23 +29,17 @@ class VKLoginner: NSObject {
         UserDefaults.standard.set(id, forKey: VKLoginner.idKey)
         UserDefaults.standard.set(token, forKey: VKLoginner.tokenKey)
         
-        let requestString = "https://api.vk.com/method/users.get?user_ids=\(id)&v=5.21&access_token=\(token)"
+        let requestString = "https://api.vk.com/method/photos.get?owner_id=-128666765&album_id=266276915&v=5.21&access_token=\(token)"
         
-        let request = URLRequest(url: URL(string: requestString)!)
+        var request = URLRequest(url: URL(string: requestString)!)
+        request.httpMethod = "POST"
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let error = error {
                 print("Filed to get a name \(error.localizedDescription)")
             } else if let data = data {
                 DispatchQueue.main.async {
-                    if let responseString = String(data: data, encoding: .utf8) {
-                       // let userData = responceString.components(separatedBy: "\":{},[]")
-                        //self?.name = userData[14] + " " + userData[20]
-                        print("RESPONSE: \(responseString)")
-                      //  print(self?.name)
-                    } else {
-                        print("Cannot decode string")
-                    }
+                    self?.fetchPhotos(from: data)
                 }
             } else {
                 print("DATA NOT FOUND")
@@ -54,7 +47,28 @@ class VKLoginner: NSObject {
         }.resume()
     }
     
+    private func fetchPhotos(from response: Data) {
+        if let root = try? JSONDecoder().decode(Root.self, from: response) {
+            photos = root.response.items
+            print("PHOTOS: \(photos)")
+        } else {
+            print("Fail to decode: \(String(data: response, encoding: .utf8) ?? "no string interpretation")")
+        }
+    }
+    
+    private static let fetchPhotoIdentifier = "photo_1280"
     private static let idKey = "id"
     private static let tokenKey = "token"
 }
 
+struct Root: Codable {
+    var response: Response
+}
+
+struct Response: Codable {
+    var items: [Photo]
+}
+
+struct Photo: Codable {
+    var photo_1280: URL
+}

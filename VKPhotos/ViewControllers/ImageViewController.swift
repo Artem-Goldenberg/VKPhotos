@@ -7,6 +7,12 @@
 
 import UIKit
 
+func presentAlert(title: String, message: String, vc: UIViewController) {
+    let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    ac.addAction(UIAlertAction(title: "OK", style: .default))
+    vc.present(ac, animated: true)
+}
+
 class ImageViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     var image: UIImage?
@@ -33,19 +39,18 @@ class ImageViewController: UIViewController {
         navigationController?.hidesBarsOnTap = false
     }
     
-    func presentAlert(title: String, message: String) {
-        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
-    }
-    
     @objc private func shareTapped() {
-        guard let imageToSave = image?.jpegData(compressionQuality: 1.0) else { return } // handle
+        guard let imageToSave = image?.jpegData(compressionQuality: 1.0) else {
+            presentAlert(title: "Ошибка", message: "Не удается сжать фотографию", vc: self)
+            return
+        }
         let actionVC = UIActivityViewController(activityItems: [imageToSave], applicationActivities: [])
         
         actionVC.completionWithItemsHandler = { [weak self] _, completed ,_,_ in
             if completed {
-                self?.presentAlert(title: "Готово", message: "Фотография успешно сохранена")
+                if let self = self {
+                    presentAlert(title: "Готово", message: "Фотография успешно сохранена", vc: self)
+                }
             }
         }
         

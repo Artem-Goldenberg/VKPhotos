@@ -41,16 +41,24 @@ class PhotoCollectionViewController: UICollectionViewController {
                 guard
                     let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                     let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                    let data = data, error == nil,
-                    let image = UIImage(data: data)
+                    let data = data, error == nil
                 else {
                     DispatchQueue.main.async {
-                    print("Failed")
+                        if let self = self {
+                            presentAlert(title: "Ошибка сети", message: "Не удалось загрузить фотографии", vc: self)
+                        }
+                    }
+                    return
+                }
+                guard let image = UIImage(data: data) else {
+                    DispatchQueue.main.async {
+                        if let self = self {
+                            presentAlert(title: "Ошибка", message: "Не удалось распознать фотографии", vc: self)
+                        }
                     }
                     return
                 }
                 DispatchQueue.main.async() {
-                    print("Image fetched")
                     if let self = self {
                         self.loadedPhotos[index] = image
                         
@@ -103,6 +111,7 @@ extension PhotoCollectionViewController: VKPhotoFetcherDelegate {
     func didFinishFetchingPhotos() {
         loadedPhotos = Array(repeating: UIImage(), count: photoFetcher.photos.count)
         loadImages()
+        print("Finished")
         collectionView.reloadData()
     }
     
@@ -113,11 +122,15 @@ extension PhotoCollectionViewController: VKPhotoFetcherDelegate {
                 present(loginVC, animated: true)
             }
         } else { // if token from previous session is available than it must be saved in the photoFetcher
-            print("Previous token is available")
             var user = [String: String]()
             user["access_token"] = photoFetcher.token
             user["user_id"] = photoFetcher.id
+            
+         
             photoFetcher.loginWith(parameters: user)
         }
+    }
+    func didFinishCheckingTokenAvailabilityWithError(error: String) {
+        presentAlert(title: "Ошибка авторизации", message: error, vc: self)
     }
 }

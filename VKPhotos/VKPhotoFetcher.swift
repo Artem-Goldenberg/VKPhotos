@@ -8,9 +8,10 @@
 import Foundation
 
 let serviceToken = "711e6061711e6061711e6061cf7166d87e7711e711e606111e3d80bbb61c32b6b81762a"
-let securityKey = "svhRvLbzul5mC3BWM8CJ"
-let appId = "7911455"
-let testId = "153415127"
+
+enum FetchError: Error {
+    case network
+}
 
 class VKPhotoFetcher: NSObject {
     var id: String
@@ -36,23 +37,21 @@ class VKPhotoFetcher: NSObject {
             if let data = data {
                 DispatchQueue.main.async {
                     if let decoded = try? JSONDecoder().decode(TokenAvailabilityRoot.self, from: data) {
-                        print("AVAILABLE: \(decoded.response.success)")
                         self?.delegate?.didFinishCheckingTokenAvailability(with: decoded.response.success == 1)
                     } else {
                         self?.delegate?.didFinishCheckingTokenAvailability(with: false)
-                        print("FAILED to decode data: \(String(data: data, encoding: .utf8) ?? "no description")")
-                        print("Error decoding a response for request: \(requestString)")
                     }
                 }
             } else if let error = error {
-                print("Error checking the token: \(error.localizedDescription)")
+                self?.delegate?.didFinishCheckingTokenAvailabilityWithError(error: error.localizedDescription)
             }
+            
         }.resume()
     }
     
     func loginWith(parameters: [String: String]) {
-        id = parameters["user_id"]! //handle
-        token = parameters["access_token"]! //handle
+        id = parameters["user_id"] ?? ""
+        token = parameters["access_token"] ?? ""
         
         UserDefaults.standard.set(id, forKey: VKPhotoFetcher.idKey)
         UserDefaults.standard.set(token, forKey: VKPhotoFetcher.tokenKey)
@@ -64,14 +63,16 @@ class VKPhotoFetcher: NSObject {
         
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let error = error {
-                print("Filed to get a name \(error.localizedDescription)")
+                self?.delegate?.didFinishFetchingPhotosWithError(error: error.localizedDescription)
             } else if let data = data {
                 DispatchQueue.main.async {
                     self?.fetchPhotos(from: data)
                     self?.delegate?.didFinishFetchingPhotos()
                 }
             } else {
-                print("DATA NOT FOUND")
+                DispatchQueue.main.async {
+                    self?.delegate?.didFinishFetchingPhotosWithError(error: error?.localizedDescription ?? "")
+                }
             }
         }.resume()
     }
@@ -79,9 +80,9 @@ class VKPhotoFetcher: NSObject {
     private func fetchPhotos(from response: Data) {
         if let root = try? JSONDecoder().decode(PhotoRequestRoot.self, from: response) {
             photos = root.response.items
-            print("PHOTOS: \(photos)")
         } else {
-            print("Fail to decode: \(String(data: response, encoding: .utf8) ?? "no string interpretation")")
+            let error = "Fail to decode: \(String(data: response, encoding: .utf8) ?? "no string interpretation")"
+            delegate?.didFinishCheckingTokenAvailabilityWithError(error: error)
         }
     }
     
@@ -90,8 +91,6 @@ class VKPhotoFetcher: NSObject {
         id = ""
         UserDefaults.standard.removeObject(forKey: VKPhotoFetcher.idKey)
         UserDefaults.standard.removeObject(forKey: VKPhotoFetcher.tokenKey)
-        
-        
     }
     
     struct TokenAvailabilityRoot: Codable {
@@ -121,4 +120,13 @@ class VKPhotoFetcher: NSObject {
 protocol VKPhotoFetcherDelegate {
     func didFinishFetchingPhotos()
     func didFinishCheckingTokenAvailability(with answer: Bool)
+    func didFinishFetchingPhotosWithError(error: String)
+    func didFinishCheckingTokenAvailabilityWithError(error: String)
+}
+
+extension VKPhotoFetcherDelegate {
+    func didFinishFetchingPhotos() {}
+    func didFinishCheckingTokenAvailability(with answer: Bool) {}
+    func didFinishFetchingPhotosWithError(error: String) {}
+    func didFinishCheckingTokenAvailabilityWithError(error: String) {}
 }

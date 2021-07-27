@@ -27,13 +27,15 @@ class LoginViewController: UIViewController {
         let request = URLRequest(url: URL(string: urlString)!)
         
         webView.load(request)
+        
+        photoFetcher.delegate = self
     }
 }
 
 extension LoginViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard let currentURL = webView.url?.absoluteString else {
-            //Handle Error
+            presentAlert(title: "Ошибка", message: "Неудалось получить URL", vc: self)
             return
         }
         // check if we are on the response page
@@ -41,18 +43,26 @@ extension LoginViewController: WKNavigationDelegate {
         
         var user = [String: String]()
         
-        print("\(currentURL)")
         if currentURL.contains("access_token") {
             //parse url
-            let token = currentURL.value(for: "access_token")! // handle
-            print("TOKEN: \(token)")
+            guard let token = currentURL.value(for: "access_token"),
+                  let expiresIn = currentURL.value(for: "expires_in"),
+                  let userId = currentURL.value(for: "user_id")
+            else {
+                presentAlert(title: "Ошибка", message: "Сбрй сервера", vc: self)
+                return
+            }
             user["access_token"] = token
-            user["expires_in"] = currentURL.value(for: "expires_in")! // handle
-            user["user_id"] = currentURL.value(for: "user_id")! // handle
+            user["expires_in"] = expiresIn
+            user["user_id"] = userId
             
             photoFetcher.loginWith(parameters: user)
         } else {
-            print("TOKEN NOT FOUND")
+            if currentURL.contains("error") {
+                presentAlert(title: "Введены неверные данные" , message: "Неверный логин или пароль", vc: self)
+            } else {
+                presentAlert(title: "Ошибка сети", message: "Неизвестная ошибка", vc: self)
+            }
         }
         
         dismiss(animated: true)
@@ -83,3 +93,8 @@ extension String {
     }
 }
 
+extension LoginViewController: VKPhotoFetcherDelegate {
+    func didFinishFetchingPhotosWithError(error: String) {
+        presentAlert(title: "Не удалось получить фотографии", message: error, vc: self)
+    }
+}

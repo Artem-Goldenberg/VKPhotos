@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		816C253726B03DAE005907FE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816C253626B03DAE005907FE /* ImageViewController.swift */; };
 		81D7E62A26AD6E7C00DEE730 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7E62926AD6E7C00DEE730 /* AppDelegate.swift */; };
 		81D7E62C26AD6E7C00DEE730 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7E62B26AD6E7C00DEE730 /* SceneDelegate.swift */; };
 		81D7E62E26AD6E7C00DEE730 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7E62D26AD6E7C00DEE730 /* LoginViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		816C253626B03DAE005907FE /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		81D7E62626AD6E7C00DEE730 /* VKPhotos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKPhotos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D7E62926AD6E7C00DEE730 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81D7E62B26AD6E7C00DEE730 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +45,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		816C253926B05034005907FE /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				81D7E62D26AD6E7C00DEE730 /* LoginViewController.swift */,
+				81D7E65526AF290A00DEE730 /* PhotoCollectionViewController.swift */,
+				816C253626B03DAE005907FE /* ImageViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		81D7E61D26AD6E7C00DEE730 = {
 			isa = PBXGroup;
 			children = (
@@ -64,8 +76,7 @@
 			children = (
 				81D7E62926AD6E7C00DEE730 /* AppDelegate.swift */,
 				81D7E62B26AD6E7C00DEE730 /* SceneDelegate.swift */,
-				81D7E62D26AD6E7C00DEE730 /* LoginViewController.swift */,
-				81D7E65526AF290A00DEE730 /* PhotoCollectionViewController.swift */,
+				816C253926B05034005907FE /* ViewControllers */,
 				81D7E65E26AF3A3500DEE730 /* PhotoCell.swift */,
 				81D7E64E26ADFAF400DEE730 /* VKPhotoFetcher.swift */,
 				81D7E62F26AD6E7C00DEE730 /* Main.storyboard */,
@@ -149,6 +160,7 @@
 				81D7E65626AF290A00DEE730 /* PhotoCollectionViewController.swift in Sources */,
 				81D7E62E26AD6E7C00DEE730 /* LoginViewController.swift in Sources */,
 				81D7E62A26AD6E7C00DEE730 /* AppDelegate.swift in Sources */,
+				816C253726B03DAE005907FE /* ImageViewController.swift in Sources */,
 				81D7E64F26ADFAF400DEE730 /* VKPhotoFetcher.swift in Sources */,
 				81D7E65F26AF3A3500DEE730 /* PhotoCell.swift in Sources */,
 				81D7E62C26AD6E7C00DEE730 /* SceneDelegate.swift in Sources */,

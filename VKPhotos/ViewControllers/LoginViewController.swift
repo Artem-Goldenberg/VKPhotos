@@ -23,7 +23,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.load(URLRequest(url: URL(string: "https://oauth.vk.com/authorize?client_id=7911455&scope=wall,offline&redirect_uri=oauth.vk.com/blank.html&display=touch&response_type=token")!))
+        let urlString = "https://oauth.vk.com/authorize?client_id=7911455&scope=wall,offline&redirect_uri=oauth.vk.com/blank.html&display=touch&response_type=token"
+        let request = URLRequest(url: URL(string: urlString)!)
+        
+        webView.load(request)
     }
 }
 
@@ -51,6 +54,8 @@ extension LoginViewController: WKNavigationDelegate {
         } else {
             print("TOKEN NOT FOUND")
         }
+        
+        dismiss(animated: true)
     }
 }
 

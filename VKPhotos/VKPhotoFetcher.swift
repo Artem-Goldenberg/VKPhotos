@@ -43,7 +43,9 @@ class VKPhotoFetcher: NSObject {
                     }
                 }
             } else if let error = error {
-                self?.delegate?.didFinishCheckingTokenAvailabilityWithError(error: error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.delegate?.didFinishCheckingTokenAvailabilityWithError(error: error.localizedDescription)
+                }
             }
             
         }.resume()
@@ -63,14 +65,19 @@ class VKPhotoFetcher: NSObject {
         
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let error = error {
-                self?.delegate?.didFinishFetchingPhotosWithError(error: error.localizedDescription)
+                DispatchQueue.main.async {
+                    print("Error")
+                    self?.delegate?.didFinishFetchingPhotosWithError(error: error.localizedDescription)
+                }
             } else if let data = data {
                 DispatchQueue.main.async {
+                    print("Finish")
                     self?.fetchPhotos(from: data)
                     self?.delegate?.didFinishFetchingPhotos()
                 }
             } else {
                 DispatchQueue.main.async {
+                    print("Not finish")
                     self?.delegate?.didFinishFetchingPhotosWithError(error: error?.localizedDescription ?? "")
                 }
             }
@@ -81,6 +88,7 @@ class VKPhotoFetcher: NSObject {
         if let root = try? JSONDecoder().decode(PhotoRequestRoot.self, from: response) {
             photos = root.response.items
         } else {
+            print("fail")
             let error = "Fail to decode: \(String(data: response, encoding: .utf8) ?? "no string interpretation")"
             delegate?.didFinishCheckingTokenAvailabilityWithError(error: error)
         }

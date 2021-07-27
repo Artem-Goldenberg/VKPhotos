@@ -27,8 +27,6 @@ class LoginViewController: UIViewController {
         let request = URLRequest(url: URL(string: urlString)!)
         
         webView.load(request)
-        
-        photoFetcher.delegate = self
     }
 }
 
@@ -90,11 +88,5 @@ extension String {
         }
         
         return self
-    }
-}
-
-extension LoginViewController: VKPhotoFetcherDelegate {
-    func didFinishFetchingPhotosWithError(error: String) {
-        presentAlert(title: "Не удалось получить фотографии", message: error, vc: self)
     }
 }

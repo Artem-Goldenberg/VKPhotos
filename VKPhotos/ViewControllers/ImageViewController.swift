@@ -26,7 +26,9 @@ class ImageViewController: UIViewController {
             imageView.image = image
         }
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+        let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+        
+        navigationItem.rightBarButtonItem = shareButton
     }
     
     override func viewWillAppear(_ animated: Bool) {

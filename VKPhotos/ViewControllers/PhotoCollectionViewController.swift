@@ -18,18 +18,19 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Все фото"
+        title = "Mobile Up Gallery"
         navigationController?.navigationBar.prefersLargeTitles = true
         
         photoFetcher.delegate = self
         photoFetcher.isTokenValid()
     }
     
-    
     // MARK: -Login button
     
     @IBAction func loginButtonTapped(_ sender: Any) {
         photoFetcher.logout()
+        loadedPhotos.removeAll()
+        collectionView.reloadData()
     }
     
     
@@ -132,5 +133,9 @@ extension PhotoCollectionViewController: VKPhotoFetcherDelegate {
     }
     func didFinishCheckingTokenAvailabilityWithError(error: String) {
         presentAlert(title: "Ошибка авторизации", message: error, vc: self)
+    }
+    
+    func didFinishFetchingPhotosWithError(error: String) {
+        presentAlert(title: "Не удалось получить фотографии", message: error, vc: self)
     }
 }

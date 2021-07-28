@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81143ECD26B18305000ADF03 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81143ECC26B18305000ADF03 /* StartViewController.swift */; };
 		816C253726B03DAE005907FE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816C253626B03DAE005907FE /* ImageViewController.swift */; };
 		81D7E62A26AD6E7C00DEE730 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7E62926AD6E7C00DEE730 /* AppDelegate.swift */; };
 		81D7E62C26AD6E7C00DEE730 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7E62B26AD6E7C00DEE730 /* SceneDelegate.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		81143ECC26B18305000ADF03 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		816C253626B03DAE005907FE /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		81D7E62626AD6E7C00DEE730 /* VKPhotos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKPhotos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D7E62926AD6E7C00DEE730 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 		816C253926B05034005907FE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				81143ECC26B18305000ADF03 /* StartViewController.swift */,
 				81D7E62D26AD6E7C00DEE730 /* LoginViewController.swift */,
 				81D7E65526AF290A00DEE730 /* PhotoCollectionViewController.swift */,
 				816C253626B03DAE005907FE /* ImageViewController.swift */,
@@ -158,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81D7E65626AF290A00DEE730 /* PhotoCollectionViewController.swift in Sources */,
+				81143ECD26B18305000ADF03 /* StartViewController.swift in Sources */,
 				81D7E62E26AD6E7C00DEE730 /* LoginViewController.swift in Sources */,
 				81D7E62A26AD6E7C00DEE730 /* AppDelegate.swift in Sources */,
 				816C253726B03DAE005907FE /* ImageViewController.swift in Sources */,

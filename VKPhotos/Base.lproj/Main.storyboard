@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="kjI-R6-6k7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Asd-uw-RAK">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -9,6 +9,53 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Mobile Up Gallery-->
+        <scene sceneID="uAT-6j-j2B">
+            <objects>
+                <viewController id="LHx-im-RzJ" customClass="StartViewController" customModule="VKPhotos" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="udJ-wB-1kj">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dk1-O0-TKz">
+                                <rect key="frame" x="30" y="710" width="330" height="70"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="WI9-C9-pdy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <state key="normal" title="Вход через VK">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginButtonTapped" destination="LHx-im-RzJ" eventType="touchUpInside" id="igd-uC-D1y"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mobile Up     Gallery" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcA-vY-NGJ">
+                                <rect key="frame" x="30" y="164" width="330" height="147"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="9r5-n0-SEh"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="dk1-O0-TKz" firstAttribute="bottom" secondItem="9r5-n0-SEh" secondAttribute="bottom" constant="-30" id="W38-eZ-RTn"/>
+                            <constraint firstItem="9r5-n0-SEh" firstAttribute="trailing" secondItem="dk1-O0-TKz" secondAttribute="trailing" constant="30" id="bwy-tF-HQv"/>
+                            <constraint firstItem="dk1-O0-TKz" firstAttribute="leading" secondItem="9r5-n0-SEh" secondAttribute="leading" constant="30" id="jPV-uD-zNG"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Mobile Up Gallery" largeTitleDisplayMode="always" id="ZD0-wF-cjN"/>
+                    <connections>
+                        <outlet property="loginButton" destination="dk1-O0-TKz" id="1DA-xa-ySO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="afe-yc-GFc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-829" y="134"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -22,7 +69,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="69" y="793"/>
+            <point key="canvasLocation" x="-829" y="828"/>
         </scene>
         <!--Image View Controller-->
         <scene sceneID="f36-E9-olT">
@@ -54,12 +101,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sc-yh-NFd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="987.69230769230762" y="93.838862559241704"/>
+            <point key="canvasLocation" x="983" y="134"/>
         </scene>
         <!--Photo Collection View Controller-->
         <scene sceneID="g9g-kT-8P3">
             <objects>
-                <collectionViewController id="QBe-OB-smA" customClass="PhotoCollectionViewController" customModule="VKPhotos" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="photos" id="QBe-OB-smA" customClass="PhotoCollectionViewController" customModule="VKPhotos" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" dataMode="prototypes" id="Erj-jN-JID">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -107,36 +154,33 @@
                         <barButtonItem key="rightBarButtonItem" title="Выход" id="XSG-yR-oEz">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
-                                <action selector="loginButtonTapped:" destination="QBe-OB-smA" id="KZS-5W-X55"/>
+                                <action selector="logout:" destination="QBe-OB-smA" id="KZS-5W-X55"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SCd-h2-c1r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="114" y="94"/>
+            <point key="canvasLocation" x="69" y="135"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="tbh-Ih-A9E">
+        <scene sceneID="lTV-S8-2Kf">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kjI-R6-6k7" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Asd-uw-RAK" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QNc-zX-XSP">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="p9V-P4-JUY">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <textAttributes key="largeTitleTextAttributes">
-                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="QBe-OB-smA" kind="relationship" relationship="rootViewController" id="o1e-HH-UOe"/>
+                        <segue destination="LHx-im-RzJ" kind="relationship" relationship="rootViewController" id="yBe-JI-ref"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hSs-EY-6ez" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wh3-2V-dp0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-860" y="93.838862559241704"/>
+            <point key="canvasLocation" x="-1625" y="134"/>
         </scene>
     </scenes>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

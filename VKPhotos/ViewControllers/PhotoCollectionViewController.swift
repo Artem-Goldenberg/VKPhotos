@@ -8,7 +8,7 @@
 import UIKit
 
 class PhotoCollectionViewController: UICollectionViewController {
-    var photoFetcher = VKPhotoFetcher()
+    var photoFetcher: VKPhotoFetcher!
     var loadedPhotos = [UIImage]()
     
     // MARK: -Constants
@@ -33,26 +33,29 @@ class PhotoCollectionViewController: UICollectionViewController {
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
         }
-        print((collectionView.collectionViewLayout as! UICollectionViewFlowLayout).minimumInteritemSpacing)
         
-        photoFetcher.delegate = self
-        photoFetcher.isTokenValid()
+        loadedPhotos = Array(repeating: UIImage(), count: photoFetcher.photos.count)
+        loadImages()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        super.viewDidAppear(false)
         
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.hidesBackButton = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(false)
+        
+        navigationItem.hidesBackButton = false
     }
     
     // MARK: -Login button
     
-    @IBAction func loginButtonTapped(_ sender: Any) {
+    @IBAction func logout(_ sender: Any) {
         photoFetcher.logout()
-        loadedPhotos.removeAll()
-        collectionView.reloadData()
+        navigationController?.popViewController(animated: true)
     }
-    
     
     // MARK: -Image loading logic
    
@@ -129,35 +132,3 @@ class PhotoCollectionViewController: UICollectionViewController {
     }
 }
 
-// MARK: -VKPhotoFetcherDelegate
-
-extension PhotoCollectionViewController: VKPhotoFetcherDelegate {
-    func didFinishFetchingPhotos() {
-        loadedPhotos = Array(repeating: UIImage(), count: photoFetcher.photos.count)
-        loadImages()
-        collectionView.reloadData()
-    }
-    
-    func didFinishCheckingTokenAvailability(with answer: Bool) {
-        if !answer {
-            if let loginVC = storyboard?.instantiateViewController(identifier: "login") as? LoginViewController {
-                loginVC.photoFetcher = photoFetcher
-                present(loginVC, animated: true)
-            }
-        } else { // if token from previous session is available than it must be saved in the photoFetcher
-            var user = [String: String]()
-            user["access_token"] = photoFetcher.token
-            user["user_id"] = photoFetcher.id
-            
-         
-            photoFetcher.loginWith(parameters: user)
-        }
-    }
-    func didFinishCheckingTokenAvailabilityWithError(error: String) {
-        presentAlert(title: "Ошибка авторизации", message: error, vc: self)
-    }
-    
-    func didFinishFetchingPhotosWithError(error: String) {
-        presentAlert(title: "Не удалось получить фотографии", message: error, vc: self)
-    }
-}

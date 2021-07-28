@@ -7,11 +7,18 @@
 
 import UIKit
 
-private let reuseIdentifier = "Photo"
-
 class PhotoCollectionViewController: UICollectionViewController {
     var photoFetcher = VKPhotoFetcher()
     var loadedPhotos = [UIImage]()
+    
+    // MARK: -Constants
+    
+    struct Storyboard {
+        static let reuseIdentifier = "Photo"
+        
+        static let sidePadding: CGFloat = 3
+        static let itemsPerRow: CGFloat = 2
+    }
     
     // MARK: -Lifecycle
 
@@ -20,6 +27,14 @@ class PhotoCollectionViewController: UICollectionViewController {
         
         title = "Mobile Up Gallery"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let collectionViewWidth = collectionView.frame.width
+        let itemWidth = (collectionViewWidth - Storyboard.sidePadding) / Storyboard.itemsPerRow
+        //itemWidth = 200
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
+        }
+        print((collectionView.collectionViewLayout as! UICollectionViewFlowLayout).minimumInteritemSpacing)
         
         photoFetcher.delegate = self
         photoFetcher.isTokenValid()
@@ -63,7 +78,7 @@ class PhotoCollectionViewController: UICollectionViewController {
                     if let self = self {
                         self.loadedPhotos[index] = image
                         
-                        let path = IndexPath(row: index, section: 0)
+                        let path = IndexPath(item: index, section: 0)
                         self.collectionView.reloadItems(at: [path])
                     }
                    
@@ -84,13 +99,13 @@ class PhotoCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PhotoCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Storyboard.reuseIdentifier, for: indexPath) as? PhotoCell else {
             print("Fail to dequeue photo cell")
             
             return UICollectionViewCell()
         }
     
-        cell.photo.image = loadedPhotos[indexPath.row]
+        cell.photo.image = loadedPhotos[indexPath.item]
         cell.photo.layer.borderWidth = 2.0
         cell.photo.layer.borderColor = UIColor.black.cgColor
         
@@ -99,7 +114,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(identifier: "imageView") as? ImageViewController {
-            vc.image = loadedPhotos[indexPath.row]
+            vc.image = loadedPhotos[indexPath.item]
             
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -112,7 +127,6 @@ extension PhotoCollectionViewController: VKPhotoFetcherDelegate {
     func didFinishFetchingPhotos() {
         loadedPhotos = Array(repeating: UIImage(), count: photoFetcher.photos.count)
         loadImages()
-        print("Finished")
         collectionView.reloadData()
     }
     

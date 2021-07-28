@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -58,31 +57,38 @@
         <scene sceneID="g9g-kT-8P3">
             <objects>
                 <collectionViewController id="QBe-OB-smA" customClass="PhotoCollectionViewController" customModule="VKPhotos" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Erj-jN-JID">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" dataMode="prototypes" id="Erj-jN-JID">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <viewLayoutGuide key="contentLayoutGuide" id="R7W-Ed-KSu"/>
+                        <viewLayoutGuide key="frameLayoutGuide" id="ybe-SE-BAC"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="baX-DK-5EY">
                             <size key="itemSize" width="128" height="128"/>
-                            <size key="estimatedItemSize" width="160" height="160"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                            <inset key="sectionInset" minX="1" minY="0.0" maxX="1" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Photo" id="caW-9Q-ssx" customClass="PhotoCell" customModule="VKPhotos" customModuleProvider="target">
-                                <rect key="frame" x="10" y="10" width="128" height="128"/>
+                                <rect key="frame" x="1" y="0.0" width="128" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pzZ-9q-31K">
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Hn-t7-ogf">
-                                            <rect key="frame" x="2.8659710112995072" y="1.8210423828988951" width="119.99999999999982" height="127.99999999999986"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2Hn-t7-ogf">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         </imageView>
                                     </subviews>
-                                </collectionViewCellContentView>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="2Hn-t7-ogf" firstAttribute="top" secondItem="caW-9Q-ssx" secondAttribute="top" id="5oS-4a-Hsg"/>
+                                    <constraint firstItem="2Hn-t7-ogf" firstAttribute="leading" secondItem="caW-9Q-ssx" secondAttribute="leading" id="7dA-Pc-dLV"/>
+                                    <constraint firstAttribute="trailing" secondItem="2Hn-t7-ogf" secondAttribute="trailing" id="MdU-n1-iKy"/>
+                                    <constraint firstAttribute="bottom" secondItem="2Hn-t7-ogf" secondAttribute="bottom" id="olQ-so-vwD"/>
+                                </constraints>
+                                <size key="customSize" width="128" height="128"/>
                                 <connections>
                                     <outlet property="photo" destination="2Hn-t7-ogf" id="dtp-Nr-d6M"/>
                                 </connections>

@@ -16,7 +16,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     struct Storyboard {
         static let reuseIdentifier = "Photo"
         
-        static let sidePadding: CGFloat = 3
+        static let sidePadding: CGFloat = 1
         static let itemsPerRow: CGFloat = 2
     }
     
@@ -26,7 +26,6 @@ class PhotoCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         
         title = "Mobile Up Gallery"
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         let collectionViewWidth = collectionView.frame.width
         let itemWidth = (collectionViewWidth - Storyboard.sidePadding) / Storyboard.itemsPerRow
@@ -38,6 +37,12 @@ class PhotoCollectionViewController: UICollectionViewController {
         
         photoFetcher.delegate = self
         photoFetcher.isTokenValid()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     // MARK: -Login button
@@ -115,6 +120,9 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(identifier: "imageView") as? ImageViewController {
             vc.image = loadedPhotos[indexPath.item]
+            
+            let date = photoFetcher.photos[indexPath.item].date
+            vc.date = Date(timeIntervalSince1970: TimeInterval(date))
             
             navigationController?.pushViewController(vc, animated: true)
         }

@@ -119,6 +119,7 @@ class VKPhotoFetcher: NSObject {
     
     struct Photo: Codable {
         var photo_1280: URL
+        var date: Int
     }
     
     private static let idKey = "id"

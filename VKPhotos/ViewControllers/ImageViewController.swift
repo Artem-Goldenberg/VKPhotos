@@ -16,12 +16,22 @@ func presentAlert(title: String, message: String, vc: UIViewController) {
 class ImageViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     var image: UIImage?
+    var date: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBar.prefersLargeTitles = true
-
+        navigationController?.navigationBar.prefersLargeTitles = false
+        
+        if let date = date {
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "ru_RU")
+            formatter.dateFormat = "d MMMM yyyy"
+            
+            
+            title = formatter.string(from: date)
+        }
+        
         if let image = image {
             imageView.image = image
         }
@@ -31,15 +41,15 @@ class ImageViewController: UIViewController {
         navigationItem.rightBarButtonItem = shareButton
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.hidesBarsOnTap = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.hidesBarsOnTap = false
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        navigationController?.hidesBarsOnTap = true
+//    }
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        navigationController?.hidesBarsOnTap = false
+//    }
     
     @objc private func shareTapped() {
         guard let imageToSave = image?.jpegData(compressionQuality: 1.0) else {

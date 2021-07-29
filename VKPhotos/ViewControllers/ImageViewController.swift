@@ -19,6 +19,9 @@ class ImageViewController: UIViewController {
     // MARK: -Properties
     
     @IBOutlet weak var imageView: UIImageView!
+    //@IBOutlet weak var scrollView: UIScrollView!
+    var scrollView: UIScrollView!
+    
     var image: UIImage?
     var date: Date?
     
@@ -39,6 +42,9 @@ class ImageViewController: UIViewController {
         
         let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
         navigationItem.rightBarButtonItem = shareButton
+        
+        configureScrollView()
+        configureImage()
     }
     
     // MARK: -Share button
@@ -69,5 +75,56 @@ class ImageViewController: UIViewController {
         formatter.dateFormat = "d MMMM yyyy"
         
         return formatter.string(from: date)
+    }
+    
+    private func configureScrollView() {
+        scrollView = UIScrollView(frame: view.bounds)
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scrollView.backgroundColor = .white
+        scrollView.contentSize = imageView.bounds.size
+        scrollView.delegate = self
+        scrollView.addSubview(imageView)
+        
+        view.addSubview(scrollView)
+        
+        let scrollViewSize = scrollView.bounds.size
+        let imageSize = imageView.bounds.size
+        let widthScale = scrollViewSize.width / imageSize.width
+        let heightScale = scrollViewSize.height / imageSize.height
+        let minScale = min(widthScale, heightScale)
+        
+        scrollView.contentSize = imageView.bounds.size
+        
+        scrollView.minimumZoomScale = minScale
+        scrollView.maximumZoomScale = 4.0
+        
+        scrollView.zoomScale = minScale
+    }
+    
+    private func configureImage() {
+        let scrollViewSize = scrollView.bounds.size
+        let imageViewSize = imageView.frame.size
+        
+        let horizontalSpace = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 0
+        let verticalSpace = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 0
+        
+        let extra = navigationController?.navigationBar.bounds.size.height ?? 0
+        
+        scrollView.contentInset = UIEdgeInsets(top: verticalSpace - extra,
+                                               left: horizontalSpace,
+                                               bottom: verticalSpace,
+                                               right: horizontalSpace)
+    }
+}
+
+// MARK: -UIScrollViewDelegate
+
+extension ImageViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        configureImage()
     }
 }

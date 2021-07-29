@@ -51,16 +51,18 @@ class StartViewController: UIViewController {
 
 extension StartViewController: VKPhotoFetcherDelegate {
     func didFinishCheckingTokenAvailability(with answer: Bool) {
-        if !answer {
+        if !answer { // если токен недоступен, то загружаем экран авторизации в ВК
             if buttonPressed {
                 if let loginVC = storyboard?.instantiateViewController(identifier: "login") as? LoginViewController {
                     loginVC.photoFetcher = photoFetcher
                     present(loginVC, animated: true)
                 } else {
-                    fatalError("Cannot dequeue with ViewController with identifier 'login'")
+                    fatalError("Cannot dequeue ViewController with identifier 'login'")
                 }
+                
+                buttonPressed = false
             }
-        } else {
+        } else { // Если токен доступен, то загружаем фото с помощью старых id и токенов
             var user = [String: String]()
             user["access_token"] = photoFetcher.token
             user["user_id"] = photoFetcher.id
@@ -70,10 +72,12 @@ extension StartViewController: VKPhotoFetcherDelegate {
         }
     }
     
-    func didFinishFetchingPhotos() {
+    func didFinishFetchingPhotos() { // когда загрузка фотографий завершена, загружаем UICollectionView
         if let photoCollectionVC = storyboard?.instantiateViewController(identifier: "photos") as? PhotoCollectionViewController {
             photoCollectionVC.photoFetcher = photoFetcher
             navigationController?.pushViewController(photoCollectionVC, animated: true)
+        } else {
+            fatalError("Cannot dequeue ViewController with identifier 'photos'")
         }
     }
     

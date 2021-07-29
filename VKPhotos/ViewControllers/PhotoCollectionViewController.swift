@@ -27,12 +27,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         
         title = "Mobile Up Gallery"
         
-        let collectionViewWidth = collectionView.frame.width
-        let itemWidth = (collectionViewWidth - Storyboard.sidePadding) / Storyboard.itemsPerRow
-        //itemWidth = 200
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-        }
+        setUpLayout()
         
         loadedPhotos = Array(repeating: UIImage(), count: photoFetcher.photos.count)
         loadImages()
@@ -41,7 +36,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(false)
         
-        navigationItem.hidesBackButton = true
+        navigationItem.hidesBackButton = true // В симуляторе явно видно как кнопка пропадает, не могу протестить на реальном устройстве, но думаю что там такого не будет
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -50,11 +45,22 @@ class PhotoCollectionViewController: UICollectionViewController {
         navigationItem.hidesBackButton = false
     }
     
-    // MARK: -Login button
+    // MARK: -Logout button
     
     @IBAction func logout(_ sender: Any) {
         photoFetcher.logout()
         navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: -Layout
+    
+    private func setUpLayout() {
+        let collectionViewWidth = collectionView.frame.width
+        let itemWidth = (collectionViewWidth - Storyboard.sidePadding) / Storyboard.itemsPerRow
+        
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
+        }
     }
     
     // MARK: -Image loading logic
@@ -89,7 +95,6 @@ class PhotoCollectionViewController: UICollectionViewController {
                         let path = IndexPath(item: index, section: 0)
                         self.collectionView.reloadItems(at: [path])
                     }
-                   
                 }
             }.resume()
         }
@@ -100,7 +105,6 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return loadedPhotos.count
@@ -119,6 +123,8 @@ class PhotoCollectionViewController: UICollectionViewController {
         
         return cell
     }
+    
+    // MARK: -UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(identifier: "imageView") as? ImageViewController {

@@ -9,8 +9,13 @@ import UIKit
 import WebKit
 
 class LoginViewController: UIViewController {
+    
+    // MARK: -Properties
+    
     var webView: WKWebView!
     var photoFetcher: VKPhotoFetcher!
+    
+    // MARK: -Lifecycle
     
     override func loadView() {
         super.loadView()
@@ -30,6 +35,8 @@ class LoginViewController: UIViewController {
     }
 }
 
+// MARK: -WKNavigationDelegate
+
 extension LoginViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard let currentURL = webView.url?.absoluteString else {
@@ -37,7 +44,10 @@ extension LoginViewController: WKNavigationDelegate {
             return
         }
         // check if we are on the response page
-        guard currentURL.contains("https://oauth.vk.com/blank.html") else { return }
+        print(currentURL)
+        guard currentURL.contains("https://oauth.vk.com/blank.html") else {
+            return
+        }
         
         var user = [String: String]()
         
@@ -56,16 +66,18 @@ extension LoginViewController: WKNavigationDelegate {
             
             photoFetcher.loginWith(parameters: user)
         } else {
-            if currentURL.contains("error") {
-                presentAlert(title: "Введены неверные данные" , message: "Неверный логин или пароль", vc: self)
+            if currentURL.value(for: "error_reason") == "user_denied" {
+                dismiss(animated: true)
             } else {
-                presentAlert(title: "Ошибка сети", message: "Неизвестная ошибка", vc: self)
+                presentAlert(title: "Ошибка сети", message: "Неизвестная ошибка", vc: presentingViewController ?? self)
             }
         }
         
         dismiss(animated: true)
     }
 }
+
+// MARK: -Utility extensions
 
 extension String {
     // methods for correctly parsing access information from the https://oauth.vk.com/blank.html

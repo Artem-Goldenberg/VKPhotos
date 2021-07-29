@@ -7,6 +7,7 @@
 
 import UIKit
 
+// Отображает стандартное предупреждение в выбранном vc
 func presentAlert(title: String, message: String, vc: UIViewController) {
     let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
     ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -14,22 +15,22 @@ func presentAlert(title: String, message: String, vc: UIViewController) {
 }
 
 class ImageViewController: UIViewController {
+    
+    // MARK: -Properties
+    
     @IBOutlet weak var imageView: UIImageView!
     var image: UIImage?
     var date: Date?
     
+    // MARK: -Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBar.prefersLargeTitles = false
+        //navigationController?.navigationBar.prefersLargeTitles = false
         
         if let date = date {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "ru_RU")
-            formatter.dateFormat = "d MMMM yyyy"
-            
-            
-            title = formatter.string(from: date)
+           title = string(from: date)
         }
         
         if let image = image {
@@ -37,19 +38,10 @@ class ImageViewController: UIViewController {
         }
         
         let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
-        
         navigationItem.rightBarButtonItem = shareButton
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        navigationController?.hidesBarsOnTap = true
-//    }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        navigationController?.hidesBarsOnTap = false
-//    }
+    // MARK: -Share button
     
     @objc private func shareTapped() {
         guard let imageToSave = image?.jpegData(compressionQuality: 1.0) else {
@@ -67,5 +59,15 @@ class ImageViewController: UIViewController {
         }
         
         present(actionVC, animated: true)
+    }
+    
+    // MARK: -Private functions
+    
+    private func string(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.dateFormat = "d MMMM yyyy"
+        
+        return formatter.string(from: date)
     }
 }

@@ -9,11 +9,10 @@ import Foundation
 
 let serviceToken = "711e6061711e6061711e6061cf7166d87e7711e711e606111e3d80bbb61c32b6b81762a"
 
-enum FetchError: Error {
-    case network
-}
-
 class VKPhotoFetcher: NSObject {
+    
+    // MARK: -Initialisation
+    
     var id: String
     var token: String
     var delegate: VKPhotoFetcherDelegate?
@@ -26,6 +25,8 @@ class VKPhotoFetcher: NSObject {
         
         photos = []
     }
+    
+    // MARK: -Interface functions
     
     func isTokenValid() {
         let requestString = "https://api.vk.com/method/secure.checkToken?token=\(token)&v=5.21&access_token=\(serviceToken)"
@@ -66,32 +67,19 @@ class VKPhotoFetcher: NSObject {
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
-                    print("Error")
                     self?.delegate?.didFinishFetchingPhotosWithError(error: error.localizedDescription)
                 }
             } else if let data = data {
                 DispatchQueue.main.async {
-                    print("Finish")
                     self?.fetchPhotos(from: data)
                     self?.delegate?.didFinishFetchingPhotos()
                 }
             } else {
                 DispatchQueue.main.async {
-                    print("Not finish")
                     self?.delegate?.didFinishFetchingPhotosWithError(error: error?.localizedDescription ?? "")
                 }
             }
         }.resume()
-    }
-    
-    private func fetchPhotos(from response: Data) {
-        if let root = try? JSONDecoder().decode(PhotoRequestRoot.self, from: response) {
-            photos = root.response.items
-        } else {
-            print("fail")
-            let error = "Fail to decode: \(String(data: response, encoding: .utf8) ?? "no string interpretation")"
-            delegate?.didFinishCheckingTokenAvailabilityWithError(error: error)
-        }
     }
     
     func logout() {
@@ -100,6 +88,19 @@ class VKPhotoFetcher: NSObject {
         UserDefaults.standard.removeObject(forKey: VKPhotoFetcher.idKey)
         UserDefaults.standard.removeObject(forKey: VKPhotoFetcher.tokenKey)
     }
+    
+    // MARK: -Private functions
+    
+    private func fetchPhotos(from response: Data) {
+        if let root = try? JSONDecoder().decode(PhotoRequestRoot.self, from: response) {
+            photos = root.response.items
+        } else {
+            let error = "Fail to decode: \(String(data: response, encoding: .utf8) ?? "no string interpretation")"
+            delegate?.didFinishCheckingTokenAvailabilityWithError(error: error)
+        }
+    }
+    
+    // MARK: -Structs for Json parsing
     
     struct TokenAvailabilityRoot: Codable {
         var response: TokenAvailabilityResponse
@@ -122,9 +123,13 @@ class VKPhotoFetcher: NSObject {
         var date: Int
     }
     
+    // MARK: -UserDefaults keys
+    
     private static let idKey = "id"
     private static let tokenKey = "token"
 }
+
+// MARK: -VKPhotoFetcherDelegate
 
 protocol VKPhotoFetcherDelegate {
     func didFinishFetchingPhotos()

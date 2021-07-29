@@ -106,6 +106,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         return 1
     }
 
+
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return loadedPhotos.count
     }
@@ -118,8 +119,6 @@ class PhotoCollectionViewController: UICollectionViewController {
         }
     
         cell.photo.image = loadedPhotos[indexPath.item]
-        cell.photo.layer.borderWidth = 2.0
-        cell.photo.layer.borderColor = UIColor.black.cgColor
         
         return cell
     }
@@ -132,6 +131,7 @@ class PhotoCollectionViewController: UICollectionViewController {
             
             let date = photoFetcher.photos[indexPath.item].date
             vc.date = Date(timeIntervalSince1970: TimeInterval(date))
+            vc.allPhotos = loadedPhotos
             
             navigationController?.pushViewController(vc, animated: true)
         }
